@@ -23,6 +23,7 @@ def makeTextBox():
     message.draw(win)
 
 def makeDBox():
+    global dist
     dBox = Rectangle(Point(5, 5), Point(180, 120))
     dBox.setOutline(color_rgb(255, 255, 255))
     dBox.draw(win)
@@ -32,6 +33,9 @@ def makeDBox():
     dMessage2 = Text(Point(90, 105), "マス")
     dMessage2.setOutline(color_rgb(255, 255, 255))
     dMessage2.draw(win)
+    dist = Text(Point(90, 55), distance)
+    dist.setOutline(color_rgb(255, 255, 255))
+    dist.draw(win)
 def makeQBox():
     global qMessage1, qMessage2, qMessage3, qMessage4
     qBox = Rectangle(Point(855, 540), Point(1195, 715))
@@ -114,13 +118,26 @@ def updateTextMessage(text):
     global message
     message.setText(text)
 
+def updateDistance(mass):
+    global dist
+    global distance
+    dist.setOutline(color_rgb(0, 0, 0))
+    distance = distance - mass
+    if distance < 0:
+        distance = 0
+    dist = Text(Point(90, 55), distance)
+    dist.setOutline(color_rgb(255, 255, 255))
+    dist.draw(win)
+
 if __name__ == '__main__':
     makeWin()
     makeTextBox()
     makeQBox()
     makeDBox()
-
     setQ(["平山", "Python", "単位", "A評価"])
-    question()
+    select1 = question()
+    if select1 == 2:
+        updateDistance(100)
     delQ()
+    win.getMouse()
     win.close()
