@@ -1,4 +1,5 @@
 from graphics import *
+import PythonRPG.Player
 message: Text
 win: GraphWin
 Qmessage1: Text
@@ -144,17 +145,16 @@ def wait():
 
 
 if __name__ == '__main__':
-
+    p1 = PythonRPG.Player.Player
     makeWin()
     makeTextBox()
     makeQBox()
     makeDBox()
-    updateImg("AK.gif")
-    setQ(["平山", "Python", "単位", "A評価"])
+    updateImg("ozisan.gif")
+    updateTextMessage("プレイヤーの初期ステータスを決めて下さい")
+    setQ(["決定", "振り直す"])
     select1 = question()
-    if select1 == 0:
-        updateImg("ozisan.gif")
-    if select1 == 2:
+    if select1 == 1:
         updateDistance(66)
     delQ()
     wait()

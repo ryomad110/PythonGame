@@ -2,10 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="859786fa-e729-49db-8d90-c55afd05c1aa" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/PythonRPG/AK.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PythonRPG/black.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PythonRPG/ozisan.gif" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PythonRPG/PythonRPG.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonRPG/PythonRPG.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PythonRPG/Player.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonRPG/Player.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PythonRPG/PythonRPG.py" beforeDir="false" afterPath="$PROJECT_DIR$/PythonRPG/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,7 +103,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/PythonRPG/PythonRPG.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\ryoma\PycharmProjects\PythonGame\PythonRPG\main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -200,7 +200,7 @@
       <workItem from="1578893082598" duration="6413000" />
       <workItem from="1578899607617" duration="601000" />
       <workItem from="1578933576684" duration="1925000" />
-      <workItem from="1579010327901" duration="4248000" />
+      <workItem from="1579010327901" duration="6907000" />
     </task>
     <task id="LOCAL-00001" summary="Question add">
       <created>1578853035893</created>
@@ -223,7 +223,14 @@
       <option name="project" value="LOCAL" />
       <updated>1578935801792</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="image and wait added">
+      <created>1579015189971</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1579015189971</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -233,7 +240,8 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Question add" />
     <MESSAGE value="Question select add" />
-    <option name="LAST_COMMIT_MESSAGE" value="Question select add" />
+    <MESSAGE value="image and wait added" />
+    <option name="LAST_COMMIT_MESSAGE" value="image and wait added" />
   </component>
   <component name="WindowStateProjectService">
     <state x="552" y="239" key="#Inspections" timestamp="1578850182869">
@@ -252,35 +260,35 @@
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state x="690" y="328" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1160/1920.0.1280.984@0.0.1920.1160" timestamp="1579013567605" />
-    <state x="480" y="93" key="CommitChangelistDialog2" timestamp="1578935801120">
+    <state x="480" y="93" key="CommitChangelistDialog2" timestamp="1579015189273">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state x="375" y="77" key="CommitChangelistDialog2/0.0.1500.960@0.0.1500.960" timestamp="1576071207278" />
-    <state x="480" y="93" key="CommitChangelistDialog2/0.0.1920.1160/1920.0.1280.984@0.0.1920.1160" timestamp="1578935801120" />
+    <state x="480" y="93" key="CommitChangelistDialog2/0.0.1920.1160/1920.0.1280.984@0.0.1920.1160" timestamp="1579015189273" />
     <state x="599" y="334" key="FileChooserDialogImpl" timestamp="1576071982776">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state x="599" y="334" key="FileChooserDialogImpl/0.0.1920.1160/1920.0.1280.984@0.0.1920.1160" timestamp="1576071982776" />
-    <state width="1877" height="321" key="GridCell.Tab.0.bottom" timestamp="1579015157819">
+    <state width="1877" height="321" key="GridCell.Tab.0.bottom" timestamp="1579017532191">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state width="1458" height="256" key="GridCell.Tab.0.bottom/0.0.1500.960@0.0.1500.960" timestamp="1575964621988" />
-    <state width="1877" height="321" key="GridCell.Tab.0.bottom/0.0.1920.1160/1920.0.1280.984@0.0.1920.1160" timestamp="1579015157819" />
-    <state width="1877" height="321" key="GridCell.Tab.0.center" timestamp="1579015157819">
+    <state width="1877" height="321" key="GridCell.Tab.0.bottom/0.0.1920.1160/1920.0.1280.984@0.0.1920.1160" timestamp="1579017532191" />
+    <state width="1877" height="321" key="GridCell.Tab.0.center" timestamp="1579017532191">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state width="1458" height="256" key="GridCell.Tab.0.center/0.0.1500.960@0.0.1500.960" timestamp="1575964621988" />
-    <state width="1877" height="321" key="GridCell.Tab.0.center/0.0.1920.1160/1920.0.1280.984@0.0.1920.1160" timestamp="1579015157819" />
-    <state width="1877" height="321" key="GridCell.Tab.0.left" timestamp="1579015157819">
+    <state width="1877" height="321" key="GridCell.Tab.0.center/0.0.1920.1160/1920.0.1280.984@0.0.1920.1160" timestamp="1579017532191" />
+    <state width="1877" height="321" key="GridCell.Tab.0.left" timestamp="1579017532191">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state width="1458" height="256" key="GridCell.Tab.0.left/0.0.1500.960@0.0.1500.960" timestamp="1575964621988" />
-    <state width="1877" height="321" key="GridCell.Tab.0.left/0.0.1920.1160/1920.0.1280.984@0.0.1920.1160" timestamp="1579015157819" />
-    <state width="1877" height="321" key="GridCell.Tab.0.right" timestamp="1579015157819">
+    <state width="1877" height="321" key="GridCell.Tab.0.left/0.0.1920.1160/1920.0.1280.984@0.0.1920.1160" timestamp="1579017532191" />
+    <state width="1877" height="321" key="GridCell.Tab.0.right" timestamp="1579017532191">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state width="1458" height="256" key="GridCell.Tab.0.right/0.0.1500.960@0.0.1500.960" timestamp="1575964621988" />
-    <state width="1877" height="321" key="GridCell.Tab.0.right/0.0.1920.1160/1920.0.1280.984@0.0.1920.1160" timestamp="1579015157819" />
+    <state width="1877" height="321" key="GridCell.Tab.0.right/0.0.1920.1160/1920.0.1280.984@0.0.1920.1160" timestamp="1579017532191" />
     <state width="1877" height="396" key="GridCell.Tab.1.bottom" timestamp="1578935843378">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
@@ -319,7 +327,7 @@
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/HirayamaGame$Player.coverage" NAME="Player Coverage Results" MODIFIED="1575964514969" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/HirayamaGame$guipoker.coverage" NAME="guipoker Coverage Results" MODIFIED="1575963554976" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/chapter12" />
-    <SUITE FILE_PATH="coverage/PythonGame$PythonRPG.coverage" NAME="PythonRPG Coverage Results" MODIFIED="1579015157811" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PythonRPG" />
+    <SUITE FILE_PATH="coverage/PythonGame$PythonRPG.coverage" NAME="PythonRPG Coverage Results" MODIFIED="1579017532185" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/PythonRPG" />
     <SUITE FILE_PATH="coverage/PythonGame$TestPy.coverage" NAME="TestPy Coverage Results" MODIFIED="1576072458830" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
