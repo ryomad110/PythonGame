@@ -7,6 +7,7 @@ Qmessage3: Text
 Qmessage4: Text
 qPoint: int
 distance = 100
+img = Image(Point(600, 240), "black.gif")
 
 def makeWin():
     global win
@@ -129,15 +130,32 @@ def updateDistance(mass):
     dist.setOutline(color_rgb(255, 255, 255))
     dist.draw(win)
 
+def updateImg(fileName):
+    global img
+    img.undraw()
+    img = Image(Point(600, 240), fileName)
+    img.draw(win)
+
+def wait():
+    key = ""
+    while key != "Return":
+        key = win.getKey()
+
+
+
 if __name__ == '__main__':
+
     makeWin()
     makeTextBox()
     makeQBox()
     makeDBox()
+    updateImg("AK.gif")
     setQ(["平山", "Python", "単位", "A評価"])
     select1 = question()
+    if select1 == 0:
+        updateImg("ozisan.gif")
     if select1 == 2:
-        updateDistance(100)
+        updateDistance(66)
     delQ()
-    win.getMouse()
+    wait()
     win.close()
