@@ -1,19 +1,27 @@
 from graphics import *
 import PythonRPG.Player
+
 message: Text
 win: GraphWin
 Qmessage1: Text
 Qmessage2: Text
 Qmessage3: Text
 Qmessage4: Text
+atk: Text
+agi: Text
+hp: Text
+money: Text
+
 qPoint: int
 distance = 100
 img = Image(Point(600, 240), "black.gif")
+
 
 def makeWin():
     global win
     win = GraphWin("Python RPG", 1200, 720)
     win.setBackground(color_rgb(0, 0, 0))
+
 
 def makeTextBox():
     global message
@@ -24,6 +32,7 @@ def makeTextBox():
     message.setOutline(color_rgb(255, 255, 255))
     message.draw(win)
 
+
 def makeDBox():
     global dist
     dBox = Rectangle(Point(5, 5), Point(180, 120))
@@ -32,12 +41,32 @@ def makeDBox():
     dMessage1 = Text(Point(90, 15), "残り")
     dMessage1.setOutline(color_rgb(255, 255, 255))
     dMessage1.draw(win)
-    dMessage2 = Text(Point(90, 105), "マス")
+    dMessage2 = Text(Point(90, 105), "km")
     dMessage2.setOutline(color_rgb(255, 255, 255))
     dMessage2.draw(win)
     dist = Text(Point(90, 55), distance)
     dist.setOutline(color_rgb(255, 255, 255))
     dist.draw(win)
+
+
+def makeSBox():
+    global atk, agi, hp, money
+    sBox = Rectangle(Point(1020, 5), Point(1195, 100))
+    sBox.setOutline(color_rgb(255, 255, 255))
+    sBox.draw(win)
+    hp = Text(Point(1100, 25), "HP: %d/%d" % (p1.now_hp, p1.max_hp))
+    hp.setOutline(color_rgb(255, 255, 255))
+    hp.draw(win)
+    atk = Text(Point(1100, 45), "ATK: %d" % p1.attack)
+    atk.setOutline(color_rgb(255, 255, 255))
+    atk.draw(win)
+    agi = Text(Point(1100, 65), "AGI: %d" % p1.agility)
+    agi.setOutline(color_rgb(255, 255, 255))
+    agi.draw(win)
+    money = Text(Point(1100, 85), "%d Py" % p1.money)
+    money.setOutline(color_rgb(255, 255, 255))
+    money.draw(win)
+
 def makeQBox():
     global qMessage1, qMessage2, qMessage3, qMessage4
     qBox = Rectangle(Point(855, 540), Point(1195, 715))
@@ -56,44 +85,51 @@ def makeQBox():
     qMessage4.setOutline(color_rgb(255, 255, 255))
     qMessage4.draw(win)
 
+
 def setQ(qMessage: list):
     global qPoint
-    if(len(qMessage) > 4):
+    if (len(qMessage) > 4):
         raise ValueError
-    if(len(qMessage) == 4):
+    if (len(qMessage) == 4):
         qMessage1.setText(qMessage[0])
         qMessage2.setText(qMessage[1])
         qMessage3.setText(qMessage[2])
         qMessage4.setText(qMessage[3])
-    if(len(qMessage) == 3):
+    if (len(qMessage) == 3):
         qMessage1.setText(qMessage[0])
         qMessage2.setText(qMessage[1])
         qMessage3.setText(qMessage[2])
-    if(len(qMessage) == 2):
+    if (len(qMessage) == 2):
         qMessage1.setText(qMessage[0])
         qMessage2.setText(qMessage[1])
-    if(len(qMessage) == 1):
+    if (len(qMessage) == 1):
         qMessage1.setText(qMessage[0])
     qPoint = 0
+
+
 def delQ():
     qMessage1.setText("")
     qMessage2.setText("")
     qMessage3.setText("")
     qMessage4.setText("")
-def selectQ(key):
+
+
+def selectQ(key, length):
     global qPoint
     if key == "Up":
         if qPoint == 0:
-            qPoint = 3
+            qPoint = length - 1
         else:
-            qPoint = qPoint - 1
+            qPoint -= 1
     if key == "Down":
-        if qPoint == 3:
+        if qPoint == length - 1:
             qPoint = 0
         else:
-            qPoint = qPoint + 1
+            qPoint += 1
 
-def question():
+
+def question(qMessage: list):
+    setQ(qMessage)
     global qPoint
     key = ""
     while key != "Return":
@@ -112,18 +148,32 @@ def question():
             qMessage4.setOutline(color_rgb(218, 165, 32))
         key = win.getKey()
         if key == "Down" or key == "Up":
-            selectQ(key)
+            selectQ(key, len(qMessage))
         if key == "Return":
             return qPoint
+
 
 def updateTextMessage(text):
     global message
     message.setText(text)
 
+def updateStats():
+    hp.undraw()
+    atk.undraw()
+    agi.undraw()
+    money.undraw()
+    hp.setText("HP: %d/%d" % (p1.now_hp, p1.max_hp))
+    atk.setText("ATK: %d" % p1.attack)
+    agi.setText("AGI: %d" % p1.agility)
+    money.setText("%d Py" % p1.money)
+    hp.draw(win)
+    atk.draw(win)
+    agi.draw(win)
+    money.draw(win)
 def updateDistance(mass):
     global dist
     global distance
-    dist.setOutline(color_rgb(0, 0, 0))
+    dist.undraw()
     distance = distance - mass
     if distance < 0:
         distance = 0
@@ -131,11 +181,13 @@ def updateDistance(mass):
     dist.setOutline(color_rgb(255, 255, 255))
     dist.draw(win)
 
+
 def updateImg(fileName):
     global img
     img.undraw()
     img = Image(Point(600, 240), fileName)
     img.draw(win)
+
 
 def wait():
     key = ""
@@ -143,19 +195,25 @@ def wait():
         key = win.getKey()
 
 
-
-if __name__ == '__main__':
-    p1 = PythonRPG.Player.Player
+def makeGUI():
     makeWin()
     makeTextBox()
     makeQBox()
     makeDBox()
+    makeSBox()
+
+
+if __name__ == '__main__':
+    p1 = PythonRPG.Player.Player()
+    makeGUI()
     updateImg("ozisan.gif")
     updateTextMessage("プレイヤーの初期ステータスを決めて下さい")
-    setQ(["決定", "振り直す"])
-    select1 = question()
-    if select1 == 1:
-        updateDistance(66)
+    select1 = question(["決定", "振り直す"])
+    while select1 != 0:
+        if select1 == 1:
+            p1.resetStat()
+            updateStats()
+            select1 = question(["決定", "振り直す"])
     delQ()
     wait()
     win.close()
