@@ -1,5 +1,6 @@
 from graphics import *
 import PythonRPG.Player
+from random import *
 
 message: Text
 win: GraphWin
@@ -15,6 +16,7 @@ money: Text
 qPoint: int
 distance = 100
 img = Image(Point(600, 240), "black.gif")
+dice = Image(Point(800, 360), "black.gif")
 
 
 def makeWin():
@@ -66,6 +68,7 @@ def makeSBox():
     money = Text(Point(1100, 85), "%d Py" % p1.money)
     money.setOutline(color_rgb(255, 255, 255))
     money.draw(win)
+
 
 def makeQBox():
     global qMessage1, qMessage2, qMessage3, qMessage4
@@ -157,6 +160,7 @@ def updateTextMessage(text):
     global message
     message.setText(text)
 
+
 def updateStats():
     hp.undraw()
     atk.undraw()
@@ -170,6 +174,8 @@ def updateStats():
     atk.draw(win)
     agi.draw(win)
     money.draw(win)
+
+
 def updateDistance(mass):
     global dist
     global distance
@@ -203,10 +209,73 @@ def makeGUI():
     makeSBox()
 
 
+def rollDice():
+    global dice
+    result = randint(1, 6)
+    dice.undraw()
+    if result == 1:
+        dice = Image(Point(1100, 480), "d1.gif")
+    if result == 2:
+        dice = Image(Point(1100, 480), "d2.gif")
+    if result == 3:
+        dice = Image(Point(1100, 480), "d3.gif")
+    if result == 4:
+        dice = Image(Point(1100, 480), "d4.gif")
+    if result == 5:
+        dice = Image(Point(1100, 480), "d5.gif")
+    if result == 6:
+        dice = Image(Point(1100, 480), "d6.gif")
+    dice.draw(win)
+    return result
+
+
+def toBoss():
+    while distance != 0:
+        updateTextMessage("ダイスを振りましょう")
+        wait()
+        diceResult = rollDice()
+        updateTextMessage("%dが出ました" % diceResult)
+        updateDistance(diceResult)
+        event()
+
+
+def treasure(d):
+    pass
+
+
+def battle(d):
+    pass
+
+
+def otherEvents(d):
+    pass
+
+
+def shop():
+    pass
+
+
+def event():
+    randomEvent = randint(1, 100)
+    if randomEvent <= 40:  # 戦闘
+        battle(distance)
+    if 40 < randomEvent <= 70:  # トレジャー
+        treasure(distance)
+    if 70 < randomEvent <= 90:  # その他のイベント
+        otherEvents(distance)
+    else:  # ショップ
+        shop()
+
+
+def boss():
+    pass
+
+
 if __name__ == '__main__':
     p1 = PythonRPG.Player.Player()
     makeGUI()
     updateImg("ozisan.gif")
+    diceResult = 0
     updateTextMessage("プレイヤーの初期ステータスを決めて下さい")
     select1 = question(["決定", "振り直す"])
     while select1 != 0:
@@ -215,5 +284,9 @@ if __name__ == '__main__':
             updateStats()
             select1 = question(["決定", "振り直す"])
     delQ()
+    updateTextMessage("冒険の始まりです")
+    wait()
+    toBoss()
+    boss()
     wait()
     win.close()
