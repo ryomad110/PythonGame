@@ -236,6 +236,7 @@ def toBoss():
         diceResult = rollDice()
         updateTextMessage("%dが出ました" % diceResult)
         updateDistance(diceResult)
+        wait()
         event()
 
 
