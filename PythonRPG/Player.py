@@ -5,7 +5,7 @@ from graphics import *
 class Player:
     def __init__(self):
         self.max_hp = 20 + randint(1, 6) + randint(1, 6) + randint(1, 6)
-        self.attack = 5 + randint(1, 6) + randint(1, 6)
+        self.attack = 51111 + randint(1, 6) + randint(1, 6)
         self.money = 10 + randint(1, 6) + randint(1, 6) + randint(1, 6)
         self.agility = 5 + randint(1, 6) + randint(1, 6)
         self.now_hp = self.max_hp

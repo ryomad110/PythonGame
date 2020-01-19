@@ -16,7 +16,7 @@ money: Text
 defence: Text
 
 qPoint: int
-distance = 100
+distance = 10
 img = Image(Point(600, 240), "black.gif")
 dice = Image(Point(800, 360), "black.gif")
 garlic = 0
@@ -612,10 +612,47 @@ def boss():
     wait()
     updateTextMessage("「かかってくるがよい！」")
     wait()
+    vamp = PythonRPG.Enemy.Vampire
+    if garlic == 1:
+        updateTextMessage("あなたはにんにくを投げつけた！")
+        wait()
+        updateTextMessage("「ぐあああ！臭い！」")
+        wait()
+        updateTextMessage("吸血鬼の動きが鈍くなった")
+        wait()
+        vamp.garlic()
+    if water == 1:
+        updateTextMessage("あなたは聖水を身体に振りかけた！")
+        wait()
+        updateTextMessage("「そんな雨水で何ができる」")
+        wait()
+        vamp.water()
+        updateTextMessage("吸血鬼の攻撃が通りにくくなった！")
+        wait()
+    if cross == 1:
+        updateTextMessage("あなたは十字架を天に掲げた！")
+        wait()
+        updateTextMessage("ぐあああ！！！忌々しい！")
+        wait()
+        updateTextMessage("吸血鬼の防御力が下がった")
+        vamp.cross()
+        wait()
+        updateTextMessage("十字架は役目を終えて砕け散った")
+        wait()
+    if flash == 1:
+        updateTextMessage("あなたは吸血鬼に懐中電灯を照射した！")
+        wait()
+        updateTextMessage("「ぐあああ！！！身体が焼けるっ！！！」")
+        vamp.flash()
+        wait()
+        updateTextMessage("懐中電灯の電池が切れてしまった")
+        wait()
+        updateTextMessage("が、吸血鬼に大きなダメージを与えた")
+        wait()
 
 
 def ending():
-    updateTextMessage("あなたの活躍により、吸血鬼は倒されました。")
+    updateTextMessage("あなたの活躍により、吸血鬼は封印されました。")
     wait()
     updateTextMessage("市内のみんなもこれで安心して眠れます。")
     wait()
@@ -644,6 +681,7 @@ if __name__ == '__main__':
             select1 = question(["決定", "振り直す"])
     delQ()
     updateTextMessage("旅の始まりです")
+    garlic = 1
     wait()
     toBoss()
     boss()
