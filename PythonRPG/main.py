@@ -1,5 +1,6 @@
 from graphics import *
 import PythonRPG.Player
+import PythonRPG.Enemy
 from random import *
 
 message: Text
@@ -12,17 +13,35 @@ atk: Text
 agi: Text
 hp: Text
 money: Text
+defence: Text
 
 qPoint: int
 distance = 100
 img = Image(Point(600, 240), "black.gif")
 dice = Image(Point(800, 360), "black.gif")
+garlic = 0
+cross = 0
+flash = 0
+water = 0
 
 
 def makeWin():
     global win
     win = GraphWin("Python RPG", 1200, 720)
     win.setBackground(color_rgb(0, 0, 0))
+
+
+def gameOver():
+    delQ()
+    delImg()
+    updateTextMessage("力尽きてしまった…")
+    wait()
+    updateTextMessage("Game Over")
+    wait()
+    updateTextMessage("次は必ず上手くいくはず！")
+    wait()
+    win.close()
+    exit(0)
 
 
 def makeTextBox():
@@ -52,14 +71,14 @@ def makeDBox():
 
 
 def makeSBox():
-    global atk, agi, hp, money
-    sBox = Rectangle(Point(1020, 5), Point(1195, 100))
+    global atk, agi, hp, money, defence
+    sBox = Rectangle(Point(1020, 5), Point(1195, 115))
     sBox.setOutline(color_rgb(255, 255, 255))
     sBox.draw(win)
     hp = Text(Point(1100, 25), "HP: %d/%d" % (p1.now_hp, p1.max_hp))
     hp.setOutline(color_rgb(255, 255, 255))
     hp.draw(win)
-    atk = Text(Point(1100, 45), "ATK: %d" % p1.attack)
+    atk = Text(Point(1100, 45), "ATK: %d + %d(%s)" % (p1.attack, p1.weapon_attack, p1.weapon_name))
     atk.setOutline(color_rgb(255, 255, 255))
     atk.draw(win)
     agi = Text(Point(1100, 65), "AGI: %d" % p1.agility)
@@ -68,6 +87,9 @@ def makeSBox():
     money = Text(Point(1100, 85), "%d Py" % p1.money)
     money.setOutline(color_rgb(255, 255, 255))
     money.draw(win)
+    defence = Text(Point(1100, 105), "DEF: %d(%s)" % (p1.defence, p1.armor_name))
+    defence.setOutline(color_rgb(255, 255, 255))
+    defence.draw(win)
 
 
 def makeQBox():
@@ -132,6 +154,7 @@ def selectQ(key, length):
 
 
 def question(qMessage: list):
+    delQ()
     setQ(qMessage)
     global qPoint
     key = ""
@@ -167,13 +190,15 @@ def updateStats():
     agi.undraw()
     money.undraw()
     hp.setText("HP: %d/%d" % (p1.now_hp, p1.max_hp))
-    atk.setText("ATK: %d" % p1.attack)
+    atk.setText("ATK: %d + %d(%s)" % (p1.attack, p1.weapon_attack, p1.weapon_name))
     agi.setText("AGI: %d" % p1.agility)
     money.setText("%d Py" % p1.money)
     hp.draw(win)
     atk.draw(win)
     agi.draw(win)
     money.draw(win)
+    if p1.chkGameover() == 1:
+        gameOver()
 
 
 def updateDistance(mass):
@@ -193,6 +218,11 @@ def updateImg(fileName):
     img.undraw()
     img = Image(Point(600, 240), fileName)
     img.draw(win)
+
+
+def delImg():
+    global img
+    img.undraw()
 
 
 def wait():
@@ -231,52 +261,380 @@ def rollDice():
 
 def toBoss():
     while distance != 0:
+        updateStats()
         updateTextMessage("ダイスを振りましょう")
         wait()
         diceResult = rollDice()
         updateTextMessage("%dが出ました" % diceResult)
         updateDistance(diceResult)
         wait()
+        dice.undraw()
         event()
 
 
-def treasure(d):
-    pass
+def getWeaponName(Type):
+    if Type == 1:
+        return "サバイバルナイフ"
+    if Type == 2:
+        return "バール"
+    if Type == 3:
+        return "金属バット"
+    if Type == 4:
+        return "ナタ"
+    if Type == 5:
+        return "日本刀"
+    if Type == 6:
+        return "どうのつるぎ"
+    if Type == 7:
+        return "ひのきのぼう"
+    if Type == 8:
+        return "こんぼう"
+    if Type == 9:
+        return "スレッジハンマー"
+    if Type == 10:
+        return "レイピア"
+    if Type == 11:
+        return "拳銃"
+    if Type == 12:
+        return "歯ブラシ"
+    if Type == 13:
+        return "ショットガン"
+    if Type == 14:
+        return "アサルトライフル"
+    if Type == 20:
+        return "伝説の剣"
 
+
+def getArmorName(Type):
+    if Type == 1:
+        return "バイク用プロテクター"
+    if Type == 2:
+        return "甲冑"
+    if Type == 3:
+        return "防弾ジャケット"
+    if Type == 4:
+        return "着ぐるみ"
+    if Type == 5:
+        return "チェインメイル"
+    if Type == 6:
+        return "プレートアーマー"
+    if Type == 20:
+        return "単位"
+
+
+def treasure(d):
+    weaponOrArmor = randint(1, 2)
+    if weaponOrArmor == 1:
+        weaponType = randint(1, 100)
+        if weaponType <= 5:
+            weaponId = 20
+        else:
+            weaponId = randint(1, 14)
+        updateTextMessage("台座の上に%sが置かれている…" % getWeaponName(weaponId))
+
+        wait()
+        updateTextMessage("取りますか？")
+        select = question(["はい", "いいえ"])
+        if select == 0:
+            delQ()
+            wanaCheck = randint(1, 100)
+            if 1 <= wanaCheck < 20:
+                updateTextMessage("台座が爆発して%sもろとも粉々になった！" % getWeaponName(weaponId))
+                wait()
+                updateTextMessage(p1.damage(randint(1, 30)))
+                updateStats()
+                wait()
+            if 20 <= wanaCheck < 40:
+                updateTextMessage("%sを手に入れた" % getWeaponName(weaponId))
+                p1.weapon(weaponId)
+                updateStats()
+                wait()
+            if 40 <= wanaCheck < 70:
+                updateTextMessage("台座へ近づくと%sは消えてしまった" % getWeaponName(weaponId))
+                wait()
+            if 70 <= wanaCheck:
+                updateTextMessage("台座へ近づくと矢が飛んできた！")
+                wait()
+                updateTextMessage(p1.damage(randint(5, 10)))
+                updateStats()
+                wait()
+                updateTextMessage("%sを手に入れた" % getWeaponName(weaponId))
+                p1.weapon(weaponId)
+                updateStats()
+                wait()
+        if select == 1:
+            delQ()
+            updateTextMessage("やめておこう")
+
+
+def td():
+    return randint(1, 6) + randint(1, 6)
+
+def enemyAttack(mo, pl):
+    dodge = 0
+    updateTextMessage("%sの攻撃！" % mo.name)
+    if (randint(1, 100) < pl.agility):
+        updateTextMessage("攻撃を回避した！")
+        wait()
+        return
+    else:
+        damageAmount = mo.attack + td() - pl.defence - randint(1, 3)
+        updateTextMessage(pl.damage(damageAmount))
+        wait()
+        updateStats()
+
+def playerAttack(pl, mo):
+    dodge = 0
+    updateTextMessage("あなたの攻撃！")
+    if (randint(1, 100) < mo.agility):
+        updateTextMessage("%sは攻撃を回避した！" % mo.name)
+        wait()
+        return
+    else:
+        damageAmount = pl.attack + pl.weapon_attack + randint(1, 6) - mo.defence - randint(1, 3)
+        updateTextMessage(mo.damage(damageAmount))
+        wait()
+        updateStats()
 
 def battle(d):
-    pass
+    over = 0
+    isWin = 0
+
+    m = PythonRPG.Enemy.Enemy(d)
+    updateImg(m.img)
+    fa = 0
+    if p1.agility + td() > m.agility + td():
+        fa = 1  # First Attack
+    updateTextMessage("%sが現れた！" % m.name)
+    wait()
+    if fa == 0:
+        updateTextMessage("先手を打たれた！")
+        wait()
+        updateTextMessage("%sの攻撃！" % m.name)
+        enemyAttack(m, p1)
+    while over != 1:
+        updateTextMessage("行動を選択")
+        select = question(["攻撃", "逃げる"])
+        if select == 0:
+            delQ()
+            playerAttack(p1, m)
+            if m.isDie() == 1:
+                isWin = 1
+                over = 1
+        if select == 1:
+            delQ()
+            escapeWin = 0
+            if p1.agility + td() >= m.agility + td():
+                escapeWin = 1
+            updateTextMessage("あなたは逃げだした！")
+            wait()
+            if escapeWin == 1:
+                updateTextMessage("なんとか撒いたようだ")
+                delImg()
+                wait()
+                over = 1
+            if escapeWin == 0:
+                updateTextMessage("追い付かれた！")
+                wait()
+        if over == 0:
+            updateTextMessage("%sの攻撃！" % m.name)
+            wait()
+            enemyAttack(m, p1)
+        if isWin == 1:
+            updateTextMessage("%sを倒した！" % m.name)
+            delImg()
+            wait()
+            p1.levelUpAll()
+            updateTextMessage("ステータスアップ！")
+            wait()
+
+
+
+
 
 
 def otherEvents(d):
-    pass
+    eventType = randint(1, 100)
+    if eventType < 10:
+        updateTextMessage("どこへ出るか分からないワープ扉だ")
+        wait()
+        updateTextMessage("入りますか？")
+        select = question(["はい", "いいえ"])
+        if select == 0:
+            delQ()
+            warpd = randint(1, 100)
+            distance = warpd
+            updateDistance(0)
+            updateTextMessage("%dkm地点へワープしました" % warpd)
+            delImg()
+            wait()
+        if select == 1:
+            delQ()
+            updateTextMessage("やめておこう")
+            delImg()
+            wait()
+
+
+def intro():
+    updateTextMessage("イントロをスキップしますか？")
+    select = question(["はい", "いいえ"])
+    if select == 0:
+        delQ()
+        return
+    if select == 1:
+        delQ()
+        updateTextMessage("最近、山奥に住む吸血鬼がたびたび町で悪事を働いているようです")
+        wait()
+        updateTextMessage("被害者が増えた末、遂に懸賞金が掛けられました")
+        wait()
+        updateTextMessage("あなたは懸賞金目当てで討伐へと出発することにしました")
+        wait()
 
 
 def shop():
-    pass
+    updateImg("Shop.gif")
+    updateTextMessage("何かの店だ")
+    wait()
+    shopType = randint(1, 3)
+    if shopType == 1 or shopType == 2:
+        updateTextMessage("武器屋のようだ")
+        shoppingEnd = 1
+        wait()
+        weapon1 = randint(1, 14)
+        weapon2 = randint(1, 14)
+        weapon3 = randint(1, 14)
+        while shoppingEnd != 0:
+            updateTextMessage("品揃えは…")
+            select = question([getWeaponName(weapon1), getWeaponName(weapon2), getWeaponName(weapon3), "何も買わない"])
+            if select == 0:
+                price = weapon1 * 4 + 5
+                updateTextMessage("%sを%dPyで購入します" % (getWeaponName(weapon1), price))
+                select = question(["はい", "いいえ"])
+                if select == 0:
+                    if price <= p1.money:
+                        p1.weapon(weapon1)
+                        p1.money = p1.money - price
+                        delQ()
+                        delImg()
+                        shoppingEnd = 0
+                    else:
+                        updateTextMessage("所持金が足りない")
+                        wait()
+                if select == 1:
+                    select = 0
+            if select == 1:
+                price = weapon2 * 4 + 5
+                updateTextMessage("%sを%dPyで購入します" % (getWeaponName(weapon2), price))
+                select = question(["はい", "いいえ"])
+                if select == 0:
+                    if price <= p1.money:
+                        p1.weapon(weapon2)
+                        p1.money = p1.money - price
+                        delQ()
+                        delImg()
+                        shoppingEnd = 0
+                    else:
+                        updateTextMessage("所持金が足りない")
+                        wait()
+                if select == 1:
+                    select = 0
+            if select == 2:
+                price = weapon3 * 4 + 5
+                updateTextMessage("%sを%dPyで購入します" % (getWeaponName(weapon3), price))
+                select = question(["はい", "いいえ"])
+                if select == 0:
+                    if price <= p1.money:
+                        p1.weapon(weapon3)
+                        p1.money = p1.money - price
+                        delQ()
+                        delImg()
+                        shoppingEnd = 0
+                    else:
+                        updateTextMessage("所持金が足りない")
+                        wait()
+                if select == 1:
+                    select = 0
+            if select == 3:
+                updateTextMessage("何も買わずに店を出ます")
+                select = question(["はい", "いいえ"])
+                if select == 0:
+                    delQ()
+                    delImg()
+                    shoppingEnd = 0
+
+    if shopType == 3:
+        updateTextMessage("宿屋のようだ")
+        price = (p1.max_hp - p1.now_hp) / 2
+        wait()
+        if p1.now_hp == p1.max_hp:
+            updateTextMessage("元気なので泊まっていかなくてもいいだろう")
+            wait()
+            delImg()
+            return
+        updateTextMessage("泊まっていきますか(宿泊費%dPy" % price)
+        select = question(["はい", "いいえ"])
+        if select == 0:
+            if price <= p1.money:
+                p1.now_hp = p1.max_hp
+                p1.money = p1.money - price
+                delQ()
+                delImg()
+                return
+            else:
+                updateTextMessage("所持金が足りない")
+                wait()
+                delQ()
+                delImg()
+                return
+        if select == 1:
+            delQ()
+            return
 
 
 def event():
     randomEvent = randint(1, 100)
-    if randomEvent <= 40:  # 戦闘
+    if randomEvent <= 40:  # 戦闘40%
         battle(distance)
-    if 40 < randomEvent <= 70:  # トレジャー
+        delImg()
+    if 40 < randomEvent <= 50:  # トレジャー10%
         treasure(distance)
-    if 70 < randomEvent <= 90:  # その他のイベント
+    if 50 < randomEvent <= 80:  # その他のイベント30%
         otherEvents(distance)
-    else:  # ショップ
+    if 80 < randomEvent:  # ショップ
         shop()
 
 
 def boss():
-    pass
+    updateTextMessage("吸血鬼の根城へとたどり着いた")
+    wait()
+    updateImg("vamp.gif")
+    updateTextMessage("「この私を1人で倒すつもりとは恐れ入った」")
+    wait()
+    updateTextMessage("「かかってくるがよい！」")
+    wait()
+
+
+def ending():
+    updateTextMessage("あなたの活躍により、吸血鬼は倒されました。")
+    wait()
+    updateTextMessage("市内のみんなもこれで安心して眠れます。")
+    wait()
+    updateTextMessage("終")
+    wait()
+    updateTextMessage("制作・著作━━━━━N班")
+    wait()
+    updateTextMessage("ここまでプレイしていただきありがとうございました！")
+    wait()
+    updateTextMessage("短期間で急いで作ったゲームですが、楽しんで頂けたならば幸いです。")
+    wait()
 
 
 if __name__ == '__main__':
     p1 = PythonRPG.Player.Player()
     makeGUI()
-    updateImg("ozisan.gif")
+    updateImg("vamp.gif")
     diceResult = 0
+    intro()
     updateTextMessage("プレイヤーの初期ステータスを決めて下さい")
     select1 = question(["決定", "振り直す"])
     while select1 != 0:
@@ -285,9 +643,9 @@ if __name__ == '__main__':
             updateStats()
             select1 = question(["決定", "振り直す"])
     delQ()
-    updateTextMessage("冒険の始まりです")
+    updateTextMessage("旅の始まりです")
     wait()
     toBoss()
     boss()
-    wait()
+    ending()
     win.close()
