@@ -76,18 +76,20 @@ class Player:
     def levelUpOne(self):
         stat = randint(1, 3)
         if stat == 1:
-            self.max_hp = self.max_hp + randint(1, 6) + randint(1, 6)
+            hpup = randint(1, 6)
+            self.now_hp = self.now_hp + hpup
+            self.max_hp = self.max_hp + hpup
 
         if stat == 2:
-            self.attack = self.attack + randint(1, 5)
+            self.attack = self.attack + randint(1, 3)
 
         if stat == 3:
-            self.agility = self.agility + randint(1, 3)
+            self.agility = self.agility + randint(1, 2)
 
     def levelUpAll(self):
-        self.max_hp = self.max_hp + randint(1, 6) + randint(1, 6)
-        self.attack = self.attack + randint(1, 5)
-        self.agility = self.agility + randint(1, 3)
+        self.max_hp = self.max_hp + randint(1, 6)
+        self.attack = self.attack + randint(1, 3)
+        self.agility = self.agility + randint(1, 2)
 
     def chkGameover(self):
         if self.now_hp <= 0:

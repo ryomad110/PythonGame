@@ -497,6 +497,12 @@ def battle(d):
                 p1.levelUpOne()
                 updateTextMessage("ステータスアップ！")
             wait()
+            winMoney = 0
+            for i in range(m.Lvl):
+                winMoney = winMoney + randint(2, 5)
+            updateTextMessage("%dPyを手に入れた" % winMoney)
+            p1.money = p1.money + winMoney
+            wait()
 
 
 def warpDoor():
@@ -582,7 +588,6 @@ def otherEvents(d):
         wait()
 
 
-
 def intro():
     updateTextMessage("イントロをスキップしますか？")
     select = question(["はい", "いいえ"])
@@ -603,7 +608,7 @@ def shop():
     updateImg("Shop.gif")
     updateTextMessage("何かの店だ")
     wait()
-    shopType = randint(1, 3)
+    shopType = randint(2, 3)
     if shopType == 1 or shopType == 2:
         updateTextMessage("武器屋のようだ")
         shoppingEnd = 1
