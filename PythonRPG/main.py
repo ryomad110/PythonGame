@@ -16,7 +16,7 @@ money: Text
 defence: Text
 
 qPoint: int
-distance = 10
+distance = 100
 img = Image(Point(600, 240), "black.gif")
 dice = Image(Point(800, 360), "black.gif")
 garlic = 0
@@ -176,6 +176,7 @@ def question(qMessage: list):
         if key == "Down" or key == "Up":
             selectQ(key, len(qMessage))
         if key == "Return":
+            delQ()
             return qPoint
 
 
@@ -193,6 +194,7 @@ def updateStats():
     atk.setText("ATK: %d + %d(%s)" % (p1.attack, p1.weapon_attack, p1.weapon_name))
     agi.setText("AGI: %d" % p1.agility)
     money.setText("%d Py" % p1.money)
+    defence.setText("DEF: %d(%s)" % (p1.defence, p1.armor_name))
     hp.draw(win)
     atk.draw(win)
     agi.draw(win)
@@ -365,15 +367,57 @@ def treasure(d):
         if select == 1:
             delQ()
             updateTextMessage("やめておこう")
+    if weaponOrArmor == 2:
+        armorType = randint(1, 100)
+        if armorType <= 5:
+            armorId = 20
+        else:
+            armorId = randint(1, 7)
+        updateTextMessage("台座の上に%sが置かれている…" % getArmorName(armorId))
+
+        wait()
+        updateTextMessage("取りますか？")
+        select = question(["はい", "いいえ"])
+        if select == 0:
+            delQ()
+            wanaCheck = randint(1, 100)
+            if 1 <= wanaCheck < 20:
+                updateTextMessage("台座が爆発して%sもろとも粉々になった！" % getArmorName(armorId))
+                wait()
+                updateTextMessage(p1.damage(randint(1, 30)))
+                updateStats()
+                wait()
+            if 20 <= wanaCheck < 40:
+                updateTextMessage("%sを手に入れた" % getArmorName(armorId))
+                p1.armor(armorId)
+                updateStats()
+                wait()
+            if 40 <= wanaCheck < 70:
+                updateTextMessage("台座へ近づくと%sは消えてしまった" % getArmorName(armorId))
+                wait()
+            if 70 <= wanaCheck:
+                updateTextMessage("台座へ近づくと矢が飛んできた！")
+                wait()
+                updateTextMessage(p1.damage(randint(5, 10)))
+                updateStats()
+                wait()
+                updateTextMessage("%sを手に入れた" % getArmorName(armorId))
+                p1.armor(armorId)
+                updateStats()
+                wait()
+        if select == 1:
+            delQ()
+            updateTextMessage("罠かもしれない。やめておこう")
 
 
 def td():
     return randint(1, 6) + randint(1, 6)
 
+
 def enemyAttack(mo, pl):
     dodge = 0
     updateTextMessage("%sの攻撃！" % mo.name)
-    if (randint(1, 100) < pl.agility):
+    if randint(1, 100) < pl.agility:
         updateTextMessage("攻撃を回避した！")
         wait()
         return
@@ -383,10 +427,11 @@ def enemyAttack(mo, pl):
         wait()
         updateStats()
 
+
 def playerAttack(pl, mo):
     dodge = 0
     updateTextMessage("あなたの攻撃！")
-    if (randint(1, 100) < mo.agility):
+    if randint(1, 100) < mo.agility:
         updateTextMessage("%sは攻撃を回避した！" % mo.name)
         wait()
         return
@@ -395,6 +440,7 @@ def playerAttack(pl, mo):
         updateTextMessage(mo.damage(damageAmount))
         wait()
         updateStats()
+
 
 def battle(d):
     over = 0
@@ -444,35 +490,97 @@ def battle(d):
             updateTextMessage("%sを倒した！" % m.name)
             delImg()
             wait()
-            p1.levelUpAll()
-            updateTextMessage("ステータスアップ！")
+            if p1.now_hp <= 10:
+                p1.levelUpAll()
+                updateTextMessage("命懸けの戦いで全ステータスアップ！")
+            if p1.now_hp > 10:
+                p1.levelUpOne()
+                updateTextMessage("ステータスアップ！")
             wait()
 
 
+def warpDoor():
+    global distance
+    updateImg("door.gif")
+    updateTextMessage("どこへ出るか分からないワープ扉だ")
+    wait()
+    updateTextMessage("入りますか？")
+    select = question(["はい", "いいえ"])
+    if select == 0:
+        delQ()
+        warpd = randint(1, 100)
+        distance = warpd
+        updateDistance(0)
+        updateTextMessage("%dkm地点へワープしました" % warpd)
+        delImg()
+        wait()
+    if select == 1:
+        delQ()
+        updateTextMessage("やめておこう")
+        delImg()
+        wait()
 
 
+def izumi():
+    updateImg("izumi.gif")
+    updateTextMessage("綺麗な泉がある")
+    wait()
+    updateTextMessage("喉が渇いた")
+    select = question(["一口飲む", "飲まない"])
+    if select == 0:
+        izumiType = randint(1, 100)
+        if izumiType >= 10:
+            updateTextMessage("全ステータスが上がった")
+            p1.levelUpAll()
+            updateStats()
+            wait()
+        if 10 > izumiType >= 40:
+            updateTextMessage(p1.heal(randint(5, 20)))
+            wait()
+        if 40 > izumiType >= 60:
+            updateTextMessage("ステータスがどれか1つ上がった")
+            p1.levelUpOne()
+            wait()
+        if 60 > izumiType >= 80:
+            updateTextMessage("変な味だった")
+            wait()
+            updateTextMessage("特に何も起こらなかった")
+            wait()
+        if 80 > izumiType >= 90:
+            updateTextMessage("HPが全回復した")
+            p1.now_hp = p1.max_hp
+            updateStats()
+            wait()
+        if 90 > izumiType >= 97:
+            updateTextMessage("猛毒だ！")
+            wait()
+            updateTextMessage(p1.damage(randint(5, 30)))
+            wait()
+        if 97 > izumiType >= 100:
+            updateTextMessage("伝説の泉だった")
+            wait()
+            updateTextMessage("HPが全回復した")
+            p1.now_hp = p1.max_hp
+            updateStats()
+            wait()
+            for i in range(3):
+                p1.levelUpAll()
+            updateTextMessage("全てのステータスが大きく上がった")
+            updateStats()
+            wait()
+        delImg()
 
 
 def otherEvents(d):
     eventType = randint(1, 100)
-    if eventType < 10:
-        updateTextMessage("どこへ出るか分からないワープ扉だ")
+    if eventType <= 5:
+        warpDoor()
+    if 5 < eventType <= 30:
+        izumi()
+    if 30 < eventType <= 100:
+        updateTextMessage("特に何もなかった")
         wait()
-        updateTextMessage("入りますか？")
-        select = question(["はい", "いいえ"])
-        if select == 0:
-            delQ()
-            warpd = randint(1, 100)
-            distance = warpd
-            updateDistance(0)
-            updateTextMessage("%dkm地点へワープしました" % warpd)
-            delImg()
-            wait()
-        if select == 1:
-            delQ()
-            updateTextMessage("やめておこう")
-            delImg()
-            wait()
+
 
 
 def intro():
@@ -518,6 +626,7 @@ def shop():
                         delImg()
                         shoppingEnd = 0
                     else:
+                        delQ()
                         updateTextMessage("所持金が足りない")
                         wait()
                 if select == 1:
@@ -534,6 +643,7 @@ def shop():
                         delImg()
                         shoppingEnd = 0
                     else:
+                        delQ()
                         updateTextMessage("所持金が足りない")
                         wait()
                 if select == 1:
@@ -550,6 +660,7 @@ def shop():
                         delImg()
                         shoppingEnd = 0
                     else:
+                        delQ()
                         updateTextMessage("所持金が足りない")
                         wait()
                 if select == 1:
@@ -561,6 +672,8 @@ def shop():
                     delQ()
                     delImg()
                     shoppingEnd = 0
+                if select == 1:
+                    delQ()
 
     if shopType == 3:
         updateTextMessage("宿屋のようだ")
@@ -579,11 +692,13 @@ def shop():
                 p1.money = p1.money - price
                 delQ()
                 delImg()
+                updateTextMessage("1泊したことでHPが全て回復した")
+                wait()
                 return
             else:
                 updateTextMessage("所持金が足りない")
-                wait()
                 delQ()
+                wait()
                 delImg()
                 return
         if select == 1:
@@ -612,9 +727,9 @@ def boss():
     wait()
     updateTextMessage("「かかってくるがよい！」")
     wait()
-    vamp = PythonRPG.Enemy.Vampire
+    vamp = PythonRPG.Enemy.Vampire()
     if garlic == 1:
-        updateTextMessage("あなたはにんにくを投げつけた！")
+        updateTextMessage("あなたはにんにくを投げつけた")
         wait()
         updateTextMessage("「ぐあああ！臭い！」")
         wait()
@@ -654,11 +769,11 @@ def boss():
 def ending():
     updateTextMessage("あなたの活躍により、吸血鬼は封印されました。")
     wait()
-    updateTextMessage("市内のみんなもこれで安心して眠れます。")
+    updateTextMessage("これで安心して眠れます。")
     wait()
     updateTextMessage("終")
     wait()
-    updateTextMessage("制作・著作━━━━━N班")
+    updateTextMessage("制作・著作━━━━━3班")
     wait()
     updateTextMessage("ここまでプレイしていただきありがとうございました！")
     wait()
@@ -666,12 +781,27 @@ def ending():
     wait()
 
 
+def goal():  # ボス未実装につきゴールとして処理
+    delQ()
+    delImg()
+    updateTextMessage("ゴール地点へ到達しました。")
+    wait()
+    updateTextMessage("終")
+    wait()
+    updateTextMessage("制作・著作━━━━━3班")
+    wait()
+    updateTextMessage("ここまでプレイしていただきありがとうございました！")
+    wait()
+    updateTextMessage("短期間で作った拙い出来のゲームですが、楽しんで頂けたならば幸いです。")
+    wait()
+
+
 if __name__ == '__main__':
     p1 = PythonRPG.Player.Player()
     makeGUI()
-    updateImg("vamp.gif")
+    updateImg("enemy.gif")
     diceResult = 0
-    intro()
+    # intro()
     updateTextMessage("プレイヤーの初期ステータスを決めて下さい")
     select1 = question(["決定", "振り直す"])
     while select1 != 0:
@@ -681,9 +811,8 @@ if __name__ == '__main__':
             select1 = question(["決定", "振り直す"])
     delQ()
     updateTextMessage("旅の始まりです")
-    garlic = 1
     wait()
     toBoss()
-    boss()
-    ending()
+    # boss()     未実装
+    goal()
     win.close()

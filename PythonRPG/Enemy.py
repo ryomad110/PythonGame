@@ -6,7 +6,7 @@ class Enemy:
         self.img = "enemy.gif"
         if d <= 20:
             self.Lvl = 5
-            self.name = "軍人"
+            self.name = "ドラゴン"
         if 20 < d <= 40:
             self.Lvl = 4
             self.name = "ライオン"

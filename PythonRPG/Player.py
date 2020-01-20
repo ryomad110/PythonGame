@@ -5,7 +5,7 @@ from graphics import *
 class Player:
     def __init__(self):
         self.max_hp = 20 + randint(1, 6) + randint(1, 6) + randint(1, 6)
-        self.attack = 51111 + randint(1, 6) + randint(1, 6)
+        self.attack = 5 + randint(1, 6) + randint(1, 6)
         self.money = 10 + randint(1, 6) + randint(1, 6) + randint(1, 6)
         self.agility = 5 + randint(1, 6) + randint(1, 6)
         self.now_hp = self.max_hp
@@ -18,57 +18,57 @@ class Player:
         self.weapon_name = wname
         self.weapon_attack = watk
 
-    def weapon(self, Type):
-        if Type == 1:
+    def weapon(self, wType):
+        if wType == 1:
             self.setWeapon("サバイバルナイフ", 6)
-        if Type == 2:
+        if wType == 2:
             self.setWeapon("バール", 9)
-        if Type == 3:
+        if wType == 3:
             self.setWeapon("金属バット", 10)
-        if Type == 4:
+        if wType == 4:
             self.setWeapon("ナタ", 12)
-        if Type == 5:
+        if wType == 5:
             self.setWeapon("日本刀", 15)
-        if Type == 6:
+        if wType == 6:
             self.setWeapon("どうのつるぎ", 15)
-        if Type == 7:
+        if wType == 7:
             self.setWeapon("ひのきのぼう", 15)
-        if Type == 8:
+        if wType == 8:
             self.setWeapon("こんぼう", 30)
-        if Type == 9:
+        if wType == 9:
             self.setWeapon("スレッジハンマー", 17)
-        if Type == 10:
+        if wType == 10:
             self.setWeapon("レイピア", 18)
-        if Type == 11:
+        if wType == 11:
             self.setWeapon("拳銃", 20)
-        if Type == 12:
+        if wType == 12:
             self.setWeapon("歯ブラシ", 23)
-        if Type == 13:
+        if wType == 13:
             self.setWeapon("ショットガン", 28)
-        if Type == 14:
+        if wType == 14:
             self.setWeapon("アサルトライフル", 40)
-        if Type == 20:
+        if wType == 20:
             self.setWeapon("伝説の剣", 100000)
 
     def addArmor(self, aname, adef):
         self.armor_name = aname
         self.defence = adef
 
-    def armor(self, Type):
-        if Type == 1:
+    def armor(self, aType):
+        if aType == 1:
             self.addArmor("バイク用プロテクター", 4)
-        if Type == 2:
+        if aType == 2:
             self.addArmor("甲冑", 7)
-        if Type == 3:
+        if aType == 3:
             self.addArmor("防弾ジャケット", 9)
-        if Type == 4:
+        if aType == 4:
             self.addArmor("着ぐるみ", 15)
-        if Type == 5:
+        if aType == 5:
             self.addArmor("チェインメイル", 11)
-        if Type == 6:
+        if aType == 6:
             self.addArmor("プレートアーマー", 17)
-        if Type == 20:
-            self.addArmor("単位", 17)
+        if aType == 20:
+            self.addArmor("単位", 124)
 
     def resetStat(self):
         self.__init__()
@@ -94,7 +94,6 @@ class Player:
             return 1
         else:
             return 0
-
 
     def damage(self, amount):
         self.now_hp = self.now_hp - amount
