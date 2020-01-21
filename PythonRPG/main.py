@@ -584,7 +584,7 @@ def izumi():
 def megami():
     updateTextMessage("天から声が聞こえる・・・")
     wait()
-    updateTextMessage("「あなたに祝福を与えましょう")
+    updateTextMessage("「あなたに祝福を与えましょう」")
     wait()
     for i in range(3):
         p1.levelUpAll()
@@ -838,9 +838,9 @@ if __name__ == '__main__':
     makeGUI()
     updateImg("enemy.gif")
     diceResult = 0
-    # intro()
+    # intro()   ボス未実装のためコメントアウト
     defstats()
     toBoss()
-    # boss()     未実装
+    # boss()    未実装
     goal()
     win.close()
