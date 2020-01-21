@@ -87,7 +87,9 @@ class Player:
             self.agility = self.agility + randint(1, 2)
 
     def levelUpAll(self):
-        self.max_hp = self.max_hp + randint(1, 6)
+        hpup = randint(1, 6)
+        self.now_hp = self.now_hp + hpup
+        self.max_hp = self.max_hp + hpup
         self.attack = self.attack + randint(1, 3)
         self.agility = self.agility + randint(1, 2)
 
@@ -98,6 +100,8 @@ class Player:
             return 0
 
     def damage(self, amount):
+        if amount <= 0:
+            amount = 1
         self.now_hp = self.now_hp - amount
         if self.now_hp < 0:
             self.now_hp = 0

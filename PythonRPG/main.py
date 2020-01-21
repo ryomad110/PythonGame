@@ -1,6 +1,6 @@
 from graphics import *
-import PythonRPG.Player
-import PythonRPG.Enemy
+import Player
+import Enemy
 from random import *
 
 message: Text
@@ -326,6 +326,7 @@ def getArmorName(Type):
 
 def treasure(d):
     weaponOrArmor = randint(1, 2)
+    updateImg("daiza.gif")
     if weaponOrArmor == 1:
         weaponType = randint(1, 100)
         if weaponType <= 5:
@@ -342,6 +343,7 @@ def treasure(d):
             wanaCheck = randint(1, 100)
             if 1 <= wanaCheck < 20:
                 updateTextMessage("台座が爆発して%sもろとも粉々になった！" % getWeaponName(weaponId))
+                updateImg("explode.gif")
                 wait()
                 updateTextMessage(p1.damage(randint(1, 30)))
                 updateStats()
@@ -366,7 +368,8 @@ def treasure(d):
                 wait()
         if select == 1:
             delQ()
-            updateTextMessage("やめておこう")
+            updateTextMessage("罠かもしれない。やめておこう")
+        delImg()
     if weaponOrArmor == 2:
         armorType = randint(1, 100)
         if armorType <= 5:
@@ -383,6 +386,7 @@ def treasure(d):
             wanaCheck = randint(1, 100)
             if 1 <= wanaCheck < 20:
                 updateTextMessage("台座が爆発して%sもろとも粉々になった！" % getArmorName(armorId))
+                updateImg("explode.gif")
                 wait()
                 updateTextMessage(p1.damage(randint(1, 30)))
                 updateStats()
@@ -408,6 +412,7 @@ def treasure(d):
         if select == 1:
             delQ()
             updateTextMessage("罠かもしれない。やめておこう")
+        delImg()
 
 
 def td():
@@ -446,7 +451,7 @@ def battle(d):
     over = 0
     isWin = 0
 
-    m = PythonRPG.Enemy.Enemy(d)
+    m = Enemy.Enemy(d)
     updateImg(m.img)
     fa = 0
     if p1.agility + td() > m.agility + td():
@@ -535,34 +540,34 @@ def izumi():
     select = question(["一口飲む", "飲まない"])
     if select == 0:
         izumiType = randint(1, 100)
-        if izumiType >= 10:
+        if izumiType <= 10:
             updateTextMessage("全ステータスが上がった")
             p1.levelUpAll()
             updateStats()
             wait()
-        if 10 > izumiType >= 40:
+        if 10 < izumiType <= 40:
             updateTextMessage(p1.heal(randint(5, 20)))
             wait()
-        if 40 > izumiType >= 60:
+        if 40 < izumiType <= 60:
             updateTextMessage("ステータスがどれか1つ上がった")
             p1.levelUpOne()
             wait()
-        if 60 > izumiType >= 80:
+        if 60 < izumiType <= 80:
             updateTextMessage("変な味だった")
             wait()
             updateTextMessage("特に何も起こらなかった")
             wait()
-        if 80 > izumiType >= 90:
+        if 80 < izumiType <= 90:
             updateTextMessage("HPが全回復した")
             p1.now_hp = p1.max_hp
             updateStats()
             wait()
-        if 90 > izumiType >= 97:
+        if 90 < izumiType <= 97:
             updateTextMessage("猛毒だ！")
             wait()
             updateTextMessage(p1.damage(randint(5, 30)))
             wait()
-        if 97 > izumiType >= 100:
+        if 97 < izumiType <= 100:
             updateTextMessage("伝説の泉だった")
             wait()
             updateTextMessage("HPが全回復した")
@@ -576,6 +581,17 @@ def izumi():
             wait()
         delImg()
 
+def megami():
+    updateTextMessage("天から声が聞こえる・・・")
+    wait()
+    updateTextMessage("「あなたに祝福を与えましょう")
+    wait()
+    for i in range(3):
+        p1.levelUpAll()
+    updateStats()
+    updateTextMessage("全てのステータスが大きく上がった")
+    wait()
+
 
 def otherEvents(d):
     eventType = randint(1, 100)
@@ -583,7 +599,9 @@ def otherEvents(d):
         warpDoor()
     if 5 < eventType <= 30:
         izumi()
-    if 30 < eventType <= 100:
+    if 30 < eventType <= 35:
+        megami()
+    if 35 < eventType <= 100:
         updateTextMessage("特に何もなかった")
         wait()
 
@@ -732,7 +750,7 @@ def boss():
     wait()
     updateTextMessage("「かかってくるがよい！」")
     wait()
-    vamp = PythonRPG.Enemy.Vampire()
+    vamp = Enemy.Vampire()
     if garlic == 1:
         updateTextMessage("あなたはにんにくを投げつけた")
         wait()
@@ -801,12 +819,7 @@ def goal():  # ボス未実装につきゴールとして処理
     wait()
 
 
-if __name__ == '__main__':
-    p1 = PythonRPG.Player.Player()
-    makeGUI()
-    updateImg("enemy.gif")
-    diceResult = 0
-    # intro()
+def defstats():
     updateTextMessage("プレイヤーの初期ステータスを決めて下さい")
     select1 = question(["決定", "振り直す"])
     while select1 != 0:
@@ -815,8 +828,18 @@ if __name__ == '__main__':
             updateStats()
             select1 = question(["決定", "振り直す"])
     delQ()
+    delImg()
     updateTextMessage("旅の始まりです")
     wait()
+
+
+if __name__ == '__main__':
+    p1 = Player.Player()
+    makeGUI()
+    updateImg("enemy.gif")
+    diceResult = 0
+    # intro()
+    defstats()
     toBoss()
     # boss()     未実装
     goal()
